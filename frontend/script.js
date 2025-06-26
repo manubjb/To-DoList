@@ -1,4 +1,4 @@
-const backend = "http://backend:5000";
+const backend = "/api";
 
 function getTasks() {
   fetch(`${backend}/tasks`)
