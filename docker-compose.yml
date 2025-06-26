@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:80"
+    networks:
+      - appnet
+
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+      - redis
+    environment:
+      - MONGO_URL=mongodb://mongo:27017
+      - REDIS_HOST=redis
+    networks:
+      - appnet
+
+  mongo:
+    image: mongo:7
+    networks:
+      - appnet
+
+  redis:
+    image: redis:7
+    networks:
+      - appnet
+
+networks:
+  appnet:
