@@ -1,13 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-  <title>To-Do App</title>
+  <meta charset="utf-8">
+  <title>Docker Demo Frontend</title>
 </head>
 <body>
-  <h1>Visitas: <span id="visitas">0</span></h1>
-  <input type="text" id="taskInput" placeholder="Digite uma tarefa">
-  <button onclick="addTask()">Adicionar</button>
-  <ul id="taskList"></ul>
-  <script src="script.js"></script>
+  <h1>Frontend estático</h1>
+
+  <button id="btn">Chamar API</button>
+  <pre id="output"></pre>
+
+  <script>
+    document.getElementById("btn").onclick = async () => {
+      const r = await fetch("/api/hello");
+      document.getElementById("output").textContent =
+        JSON.stringify(await r.json(), null, 2);
+    };
+  </script>
 </body>
 </html>
+

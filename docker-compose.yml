@@ -1,39 +1,42 @@
 version: "3.9"
 
 services:
-  nginx:
-    build: ./nginx
-    ports:
-      - "80:80"
-      - "443:443"
-    depends_on:
-      - backend
-      - frontend
-    networks:
-      - appnet
-
-  frontend:
-    build: ./frontend
-    networks:
-      - appnet
-
   backend:
     build: ./backend
+    depends_on:
+      - mongo
+      - redis
     environment:
       - MONGO_URL=mongodb://mongo:27017
       - REDIS_HOST=redis
-    networks:
-      - appnet
+    networks: [appnet]
+
+  frontend:
+    build: ./frontend
+    networks: [appnet]
+
+  reverse-proxy:
+    build: ./reverse-proxy
+    depends_on:
+      - backend
+      - frontend
+    ports:
+      - "80:80"          # expõe para o host
+    networks: [appnet]
 
   mongo:
-    image: mongo:7
-    networks:
-      - appnet
+    image: mongo:7-jammy
+    volumes:
+      - mongo-data:/data/db
+    networks: [appnet]
 
   redis:
-    image: redis:7
-    networks:
-      - appnet
+    image: redis:7-alpine
+    networks: [appnet]
 
 networks:
   appnet:
+
+volumes:
+  mongo-data:
+

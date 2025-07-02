@@ -1,7 +1,12 @@
-FROM python:3.11-slim
+FROM node:20-alpine
 WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
+
+# instalar dependências
+COPY package*.json ./
+RUN npm ci --omit=dev
+
+# copiar fonte e rodar
 COPY . .
-EXPOSE 5000
-CMD ["python", "app.py"]
+EXPOSE 3000
+CMD ["node", "index.js"]
+
